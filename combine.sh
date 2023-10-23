@@ -35,6 +35,16 @@ fi
 pages_file1=$(pdftk "$input_file1" dump_data | grep NumberOfPages | awk '{print $2}')
 pages_file2=$(pdftk "$input_file2" dump_data | grep NumberOfPages | awk '{print $2}')
 
+# Überprüfen, ob die Anzahl der Seiten in den beiden Dateien übereinstimmt
+if [ "$pages_file1" -ne "$pages_file2" ]; then
+    echo "Fehler: Die beiden PDF-Dateien haben eine unterschiedliche Anzahl an Seiten."
+    exit 1
+fi
+
+# Anzahl der Seiten in den beiden Eingabedateien ermitteln
+pages_file1=$(pdftk "$input_file1" dump_data | grep NumberOfPages | awk '{print $2}')
+pages_file2=$(pdftk "$input_file2" dump_data | grep NumberOfPages | awk '{print $2}')
+
 # Kombinieren der PDF-Dateien und Stempeln des dritten PDFs (falls vorhanden)
 pdftk "$input_file1" multistamp "$input_file2" output temp_combined.pdf
 if [ -n "$stamp_file" ]; then
